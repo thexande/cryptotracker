@@ -15,6 +15,7 @@ struct StyleConstants {
         static let primaryRed: UIColor = UIColor(hex: "D65745")
         static let orange: UIColor = UIColor(hex: "E79F3C")
         static let purple: UIColor = UIColor(hex: "925EB1")
+        static let bitOrange: UIColor = UIColor(hex: "E9973D")
     }
 }
 
@@ -30,18 +31,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.rootViewController = RootTabViewController()
         window?.makeKeyAndVisible()
         
-        UIApplication.shared.statusBarStyle = .lightContent
-        let navigationBarAppearance = UINavigationBar.appearance()
-        navigationBarAppearance.barTintColor = StyleConstants.color.primaryGreen
-        navigationBarAppearance.tintColor = UIColor.white
+//        UIApplication.shared.statusBarStyle = .lightContent
+//        let navigationBarAppearance = UINavigationBar.appearance()
+//        navigationBarAppearance.barTintColor = StyleConstants.color.primaryGreen
+//        navigationBarAppearance.tintColor = UIColor.white
         
         // change navigation item title color
-        navigationBarAppearance.titleTextAttributes = [NSAttributedStringKey.foregroundColor:UIColor.white]
-        navigationBarAppearance.largeTitleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
+//        navigationBarAppearance.titleTextAttributes = [NSAttributedStringKey.foregroundColor:UIColor.white]
+//        navigationBarAppearance.largeTitleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
         
-        let tabBarAppear = UITabBar.appearance()
-        tabBarAppear.barTintColor = StyleConstants.color.primaryGreen
-        tabBarAppear.tintColor = UIColor.white
+//        let tabBarAppear = UITabBar.appearance()
+//        tabBarAppear.barTintColor = StyleConstants.color.primaryGreen
+//        tabBarAppear.tintColor = UIColor.white
         return true
     }
 

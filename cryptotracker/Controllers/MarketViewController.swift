@@ -13,84 +13,11 @@ import SDWebImage
 import Realm
 import RealmSwift
 
-class PillView: UIView {
-    let label = UILabel()
-    
+
+class MarketHeaderView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
-        layer.masksToBounds = true
-        backgroundColor = StyleConstants.color.purple
-        addSubview(label)
-        label.text = "0"
-        label.textColor = .white
-        label.font = UIFont.systemFont(ofSize: 10, weight: .semibold)
-        label.topAnchor == topAnchor + 4
-        label.bottomAnchor == bottomAnchor - 4
-        label.leadingAnchor == leadingAnchor + 4
-        label.trailingAnchor == trailingAnchor - 4
-        layer.masksToBounds = true
-        layer.cornerRadius = 5
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
-
-class MarketCell: UITableViewCell {
-    let logoImageView = UIImageView()
-    let titleLabel = UILabel()
-    let subTitleLabel = UILabel()
-    let percentageChangeLabel = UILabel()
-    lazy var logoContainer = UIStackView(arrangedSubviews: [self.titleLabel, self.subTitleLabel])
-    let rankView = PillView()
-    
-    lazy var rankContainer: UIView = {
-        let view = UIView()
-        view.addSubview(rankView)
-        return view
-    }()
-    
-    func setCrypto(_ crypto: RealmCryptoCurrency) {
-        guard let url = URL(string: crypto.iconUrl) else { return }
-        logoImageView.sd_setImage(with: url, completed: nil)
-        titleLabel.text = crypto.symbol
-        subTitleLabel.text = crypto.name
-        percentageChangeLabel.text = "\(String(crypto.percentChangeTwentyFourHour))%"
-        percentageChangeLabel.textColor = (crypto.percentChangeTwentyFourHour > 0 ? StyleConstants.color.emerald : StyleConstants.color.primaryRed)
-        rankView.label.text = String(crypto.rank)
-    }
-    
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        let views: [UIView] = [logoImageView, logoContainer, percentageChangeLabel, rankContainer]
-        views.forEach { view in
-            addSubview(view)
-        }
-        
-        rankView.centerYAnchor == centerYAnchor
-        rankContainer.leadingAnchor == leadingAnchor + 12
-        rankContainer.widthAnchor == 36
-        rankContainer.verticalAnchors == verticalAnchors
-    
-        rankView.centerAnchors == rankContainer.centerAnchors
-        
-        percentageChangeLabel.trailingAnchor == trailingAnchor - 12
-        percentageChangeLabel.centerYAnchor == centerYAnchor
-        
-        titleLabel.font = UIFont.systemFont(ofSize: 28, weight: .ultraLight)
-        subTitleLabel.font = UIFont.systemFont(ofSize: 10, weight: .light)
-        percentageChangeLabel.font = UIFont.systemFont(ofSize: 16, weight: .ultraLight)
-        
-        logoContainer.axis = .vertical
-        logoContainer.leadingAnchor == logoImageView.trailingAnchor + 12
-        logoContainer.centerYAnchor == centerYAnchor
-        
-        
-        logoImageView.heightAnchor == 40
-        logoImageView.widthAnchor == logoImageView.heightAnchor
-        logoImageView.centerYAnchor == centerYAnchor
-        logoImageView.leadingAnchor == rankContainer.trailingAnchor + 12
+        backgroundColor = .green
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -99,6 +26,8 @@ class MarketCell: UITableViewCell {
 }
 
 class MarketViewController: UIViewController {
+    let searchController = UISearchController(searchResultsController: nil)
+    
     lazy var cryptos: [RealmCryptoCurrency]? = {
         do {
             let realm = try Realm()
@@ -116,17 +45,25 @@ class MarketViewController: UIViewController {
     }()
     
     lazy var segment: UISegmentedControl = {
-        let segment: UISegmentedControl = UISegmentedControl(items: [ "Cap", "1 hr %", "24 hr %", "7 day %", "Volume"])
+        let segment: UISegmentedControl = UISegmentedControl(items: [ "Cap", "1 hr %", "24 hr %", "7 day %"])
         segment.sizeToFit()
         segment.addTarget(self, action: #selector(didChangeSegmentedControl(_:)), for: .valueChanged)
-        segment.tintColor = UIColor.white
         segment.selectedSegmentIndex = 0
         return segment
     }()
     
+    @objc func didPressRefresh() {
+        
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "market".uppercased()
+        
+        tableView.tableHeaderView = MarketHeaderView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 200))
+        
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: FontAwesomeHelper.iconToImage(icon: .refresh, color: .white, width: 35, height: 35), style: .plain, target: self, action: #selector(didPressRefresh))
+        
         view.addSubview(tableView)
         self.navigationItem.titleView = segment
         
@@ -137,6 +74,17 @@ class MarketViewController: UIViewController {
         CryptoCurrencyHelper.fetchCryptos(url: UrlConstants.coinMarketCapTickerUrl) { (cryptos) in
             RealmCrudHelper.writeCryptos(cryptos)
         }
+        
+        // Setup the Search Controller
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Search Crypto Currencies"
+        navigationItem.searchController = searchController
+        definesPresentationContext = true
+        
+        // Setup the Scope Bar
+        searchController.searchBar.scopeButtonTitles = ["All", "Chocolate", "Hard", "Other"]
+        searchController.searchBar.delegate = self
     }
     
     @objc func didChangeSegmentedControl(_ segmented: UISegmentedControl) {
@@ -153,17 +101,17 @@ class MarketViewController: UIViewController {
             tableView.reloadData()
         case 2:
             cryptos = cryptos?.sorted(by: { (crypto1, crypto2) -> Bool in
-                return crypto1.percentChangeTwentyFourHour < crypto2.percentChangeTwentyFourHour
+                return crypto1.percentChangeTwentyFourHour > crypto2.percentChangeTwentyFourHour
             })
             tableView.reloadData()
         case 3:
             cryptos = cryptos?.sorted(by: { (crypto1, crypto2) -> Bool in
-                return crypto1.percentChangeSevenDays < crypto2.percentChangeSevenDays
+                return crypto1.percentChangeSevenDays > crypto2.percentChangeSevenDays
             })
             tableView.reloadData()
         case 3:
             cryptos = cryptos?.sorted(by: { (crypto1, crypto2) -> Bool in
-                return crypto1.twentyFourHourVolumeUsd < crypto2.twentyFourHourVolumeUsd
+                return crypto1.twentyFourHourVolumeUsd > crypto2.twentyFourHourVolumeUsd
             })
             tableView.reloadData()
         default: return
@@ -189,5 +137,19 @@ extension MarketViewController: UITableViewDelegate, UITableViewDataSource {
         guard let cryptos = cryptos, let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: MarketCell.self)) as? MarketCell else { return UITableViewCell() }
         cell.setCrypto(cryptos[indexPath.row])
         return cell
+    }
+}
+
+extension MarketViewController: UISearchResultsUpdating {
+    // MARK: - UISearchResultsUpdating Delegate
+    func updateSearchResults(for searchController: UISearchController) {
+        // TODO
+    }
+}
+
+extension MarketViewController: UISearchBarDelegate {
+    // MARK: - UISearchBar Delegate
+    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+        //        filterContentForSearchText(searchBar.text!, scope: searchBar.scopeButtonTitles![selectedScope])
     }
 }
