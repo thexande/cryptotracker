@@ -15,18 +15,24 @@ class CryptoDetailViewController: UITableViewController {
         let name = CryptoDetailCell(title: "Name", detail: crypto.name)
         let symbol = CryptoDetailCell(title: "Symbol", detail: crypto.symbol)
         let rank = CryptoDetailCell(title: "Rank", detail: String(crypto.rank))
-        let priceUsd = CryptoDetailCell(title: "USD Price", detail: "$\(crypto.dollarPrice)")
-        let priceBtc = CryptoDetailCell(title: "Bitcoin Price", detail: "$\(crypto.bitcoinPrice)")
-        let twentyFourHourVolume = CryptoDetailCell(title: "24 Hour USD Volume", detail: "$\(crypto.twentyFourHourVolumeUsd)")
-        let marketCap = CryptoDetailCell(title: "USD Market Cap", detail: "$\(crypto.marketCapUsd)")
-        let availableSupply = CryptoDetailCell(title: "Available Supply", detail: "\(crypto.availableSupply)")
-        let totalSupply = CryptoDetailCell(title: "Total Supply", detail: "\(crypto.totalSupply)")
-        let maxSupply = CryptoDetailCell(title: "Max Supply", detail: "\(crypto.maxSupply)")
-        let percentChangeTwentyFour = CryptoDetailCell(title: "24 Hour Percentage Change", detail: "\(crypto.percentChangeTwentyFourHour)%")
-        let percentChangeSevenDay = CryptoDetailCell(title: "7 Day Percentage Change", detail: "\(crypto.percentChangeSevenDays)%")
-        let percentChangeOneHour = CryptoDetailCell(title: "1 Hour Percentage Change", detail: "\(crypto.percentChangeOneHour)%")
-        let lastUpdated = CryptoDetailCell(title: "Last Updated", detail: "\(crypto.lastUpdated)")
+        let priceUsd = CryptoDetailCell(title: "USD Price", detail: crypto.dollarPrice.currencyUS)
+        let priceBtc = CryptoDetailCell(title: "Bitcoin Price", detail: "\(crypto.bitcoinPrice)")
+        let twentyFourHourVolume = CryptoDetailCell(title: "24 Hour USD Volume", detail: crypto.twentyFourHourVolumeUsd.currencyUS)
+        let marketCap = CryptoDetailCell(title: "USD Market Cap", detail: crypto.marketCapUsd.currencyUS)
+        let availableSupply = CryptoDetailCell(title: "Available Supply", detail: "\(Int(crypto.availableSupply))")
+        let totalSupply = CryptoDetailCell(title: "Total Supply", detail: "\(Int(crypto.totalSupply))")
+        let maxSupply = CryptoDetailCell(title: "Max Supply", detail: "\(Int(crypto.dollarPrice))")
         
+        let percentChangeTwentyFour = CryptoDetailCell(title: "24 Hour Percentage Change", detail: "\(crypto.percentChangeTwentyFourHour)%")
+        percentChangeTwentyFour.detailLabel.textColor = (crypto.percentChangeTwentyFourHour > 0 ? StyleConstants.color.emerald : StyleConstants.color.primaryRed)
+        
+        let percentChangeSevenDay = CryptoDetailCell(title: "7 Day Percentage Change", detail: "\(crypto.percentChangeSevenDays)%")
+        percentChangeSevenDay.detailLabel.textColor = (crypto.percentChangeSevenDays > 0 ? StyleConstants.color.emerald : StyleConstants.color.primaryRed)
+        
+        let percentChangeOneHour = CryptoDetailCell(title: "1 Hour Percentage Change", detail: "\(crypto.percentChangeOneHour)%")
+        percentChangeOneHour.detailLabel.textColor = (crypto.percentChangeOneHour > 0 ? StyleConstants.color.emerald : StyleConstants.color.primaryRed)
+        
+        let lastUpdated = CryptoDetailCell(title: "Last Updated", detail: "\(crypto.lastUpdated)")
         let infoSection = DetailSection(title: "Information", cells: [name, symbol, rank, lastUpdated])
         let priceSection = DetailSection(title: "Prices", cells: [priceUsd, priceBtc])
         let volumeSection = DetailSection(title: "Volume", cells: [twentyFourHourVolume, marketCap])
@@ -46,6 +52,7 @@ class CryptoDetailViewController: UITableViewController {
         titleImage.widthAnchor == titleImage.heightAnchor
         
         tableView.tableFooterView = UIView()
+        tableView.allowsSelection = false
         
         titleImage.sd_setImage(with: URL(string: crypto.iconUrl), completed: nil)
         

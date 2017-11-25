@@ -9,8 +9,8 @@ class CryptoDetailCell: UITableViewCell {
         super.init(style: .default, reuseIdentifier: nil)
         detailLabel.text = detail
         titleLabel.text = title
-        titleLabel.font = UIFont.systemFont(ofSize: 12)
-        detailLabel.font = UIFont.systemFont(ofSize: 12)
+        titleLabel.font = UIFont.systemFont(ofSize: 14)
+        detailLabel.font = UIFont.systemFont(ofSize: 16)
         
         detailLabel.textColor = StyleConstants.color.secondaryGray
         
