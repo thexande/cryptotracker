@@ -3,7 +3,7 @@ import Anchorage
 import SDWebImage
 
 class MarketCell: UITableViewCell {
-    let pillFontSize: CGFloat = 8
+    let pillFontSize: CGFloat = 10
     let logoImageView = UIImageView()
     let titleLabel = UILabel()
     let subTitleLabel = UILabel()

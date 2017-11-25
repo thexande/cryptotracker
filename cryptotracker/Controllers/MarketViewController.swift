@@ -13,18 +13,6 @@ import SDWebImage
 import Realm
 import RealmSwift
 
-
-class MarketHeaderView: UIView {
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        backgroundColor = .green
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
-
 class MarketViewController: UIViewController {
     let searchController = UISearchController(searchResultsController: nil)
     
@@ -53,6 +41,9 @@ class MarketViewController: UIViewController {
     }()
     
     @objc func didPressRefresh() {
+        let loadingViewController = BlurLoadingViewController()
+        loadingViewController.modalPresentationStyle = .overFullScreen
+        self.present(loadingViewController, animated: false, completion: nil)
         
     }
     
@@ -60,7 +51,7 @@ class MarketViewController: UIViewController {
         super.viewDidLoad()
         title = "market".uppercased()
         
-        tableView.tableHeaderView = MarketHeaderView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 200))
+//        tableView.tableHeaderView = MarketHeaderView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 125))
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: FontAwesomeHelper.iconToImage(icon: .refresh, color: .white, width: 35, height: 35), style: .plain, target: self, action: #selector(didPressRefresh))
         
