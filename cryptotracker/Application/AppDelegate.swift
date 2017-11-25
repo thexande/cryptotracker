@@ -16,6 +16,8 @@ struct StyleConstants {
         static let orange: UIColor = UIColor(hex: "E79F3C")
         static let purple: UIColor = UIColor(hex: "925EB1")
         static let bitOrange: UIColor = UIColor(hex: "E9973D")
+        static let primaryGray: UIColor = UIColor(hex: "F0EFF4")
+        static let secondaryGray: UIColor = UIColor(hex: "9B9B9C")
     }
 }
 

@@ -30,6 +30,8 @@ class PillView: UIView {
         label.trailingAnchor == trailingAnchor - 4
         layer.masksToBounds = true
         layer.cornerRadius = 5
+        
+        label.textAlignment = .center
     }
     
     required init?(coder aDecoder: NSCoder) {

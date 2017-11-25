@@ -9,6 +9,9 @@ class BlurLoadingViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func dismissFade() {
+        self.unblur()
+    }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)

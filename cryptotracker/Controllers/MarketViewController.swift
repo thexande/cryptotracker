@@ -13,6 +13,15 @@ import SDWebImage
 import Realm
 import RealmSwift
 
+
+extension Double {
+    /// Rounds the double to decimal places value
+    func rounded(toPlaces places:Int) -> Double {
+        let divisor = pow(10.0, Double(places))
+        return (self * divisor).rounded() / divisor
+    }
+}
+
 class MarketViewController: UIViewController {
     let searchController = UISearchController(searchResultsController: nil)
     
@@ -40,11 +49,11 @@ class MarketViewController: UIViewController {
         return segment
     }()
     
+    let loadingViewController = BlurLoadingViewController()
+
+    
     @objc func didPressRefresh() {
-        let loadingViewController = BlurLoadingViewController()
-        loadingViewController.modalPresentationStyle = .overFullScreen
-        self.present(loadingViewController, animated: false, completion: nil)
-        
+        loadCryptos()
     }
     
     override func viewDidLoad() {
@@ -62,9 +71,7 @@ class MarketViewController: UIViewController {
         tableView.bottomAnchor == view.bottomAnchor
         tableView.topAnchor ==  view.topAnchor
         
-        CryptoCurrencyHelper.fetchCryptos(url: UrlConstants.coinMarketCapTickerUrl) { (cryptos) in
-            RealmCrudHelper.writeCryptos(cryptos)
-        }
+        loadCryptos()
         
         // Setup the Search Controller
         searchController.searchResultsUpdater = self
@@ -76,6 +83,18 @@ class MarketViewController: UIViewController {
         // Setup the Scope Bar
         searchController.searchBar.scopeButtonTitles = ["All", "Chocolate", "Hard", "Other"]
         searchController.searchBar.delegate = self
+    }
+    
+    func loadCryptos() {
+        loadingViewController.modalPresentationStyle = .overFullScreen
+        self.present(loadingViewController, animated: false, completion: nil)
+        CryptoCurrencyHelper.fetchCryptos(url: UrlConstants.coinMarketCapTickerUrl) { [weak self] (cryptos) in
+            RealmCrudHelper.writeCryptos(cryptos)
+            DispatchQueue.main.async {
+                self?.loadingViewController.unblur()
+                self?.loadingViewController.dismiss(animated: true, completion: nil)
+            }
+        }
     }
     
     @objc func didChangeSegmentedControl(_ segmented: UISegmentedControl) {
@@ -111,6 +130,12 @@ class MarketViewController: UIViewController {
 }
 
 extension MarketViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let crypto = cryptos?[indexPath.row] else { return }
+        let vc = CryptoDetailViewController(crypto)
+        navigationController?.pushViewController(vc, animated: true)
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let cryptos = cryptos else { return 0 }
         return cryptos.count

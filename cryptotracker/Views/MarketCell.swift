@@ -51,8 +51,8 @@ class MarketCell: UITableViewCell {
         twentyFourHourPill.label.text = "24 hr: \(crypto.percentChangeTwentyFourHour)%"
         sevenDayPill.label.text = "7 day: \(crypto.percentChangeSevenDays)%"
         
-        usdPill.label.text = "USD: $\(crypto.dollarPrice)"
-        btcPill.label.text = "BTC: \(crypto.bitcoinPrice)"
+        usdPill.label.text = "USD: $\(crypto.dollarPrice.rounded(toPlaces: 2))"
+        btcPill.label.text = "BTC: \(crypto.bitcoinPrice.rounded(toPlaces: 5))"
         
         twentyFourHourPill.backgroundColor = (crypto.percentChangeTwentyFourHour > 0 ? StyleConstants.color.emerald : StyleConstants.color.primaryRed)
         sevenDayPill.backgroundColor = (crypto.percentChangeSevenDays > 0 ? StyleConstants.color.emerald : StyleConstants.color.primaryRed)
@@ -64,6 +64,9 @@ class MarketCell: UITableViewCell {
         views.forEach { view in
             addSubview(view)
         }
+        
+        twentyFourHourPill.widthAnchor == 80
+        sevenDayPill.widthAnchor == 80
         
         twentyFourHourPill.label.font = UIFont.systemFont(ofSize: self.pillFontSize, weight: .regular)
         sevenDayPill.label.font = UIFont.systemFont(ofSize: self.pillFontSize, weight: .regular)
