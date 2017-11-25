@@ -16,8 +16,8 @@ class RootTabViewController: UITabBarController {
         let vc = UINavigationController(rootViewController: MarketViewController())
         let icon = FontAwesomeHelper.iconToImage(icon: FontAwesome.lineChart, color: .black, width: 35, height: 35)
         let item = UITabBarItem(title: "queue".uppercased(), image: icon, selectedImage: icon)
-        vc.navigationBar.prefersLargeTitles = true
-        vc.navigationItem.largeTitleDisplayMode = .always
+//        vc.navigationBar.prefersLargeTitles = true
+//        vc.navigationItem.largeTitleDisplayMode = .always
         vc.tabBarItem = item
         return vc
     }()

@@ -18,6 +18,7 @@
 		B0228B6F1FC8A614003D5B57 /* MarketViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0228B6E1FC8A614003D5B57 /* MarketViewController.swift */; };
 		B0228B711FC8A67D003D5B57 /* MyHoldingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0228B701FC8A67D003D5B57 /* MyHoldingsViewController.swift */; };
 		B0228B741FC8AC01003D5B57 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0228B731FC8AC01003D5B57 /* UIColor.swift */; };
+		B0228B781FC8DEC7003D5B57 /* CryptoCurrency.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0228B771FC8DEC7003D5B57 /* CryptoCurrency.swift */; };
 		B0959D1B1FC8A3A10028F404 /* FontAwesomeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0959D1A1FC8A3A10028F404 /* FontAwesomeHelper.swift */; };
 		EF538B0C2FFEA7D351E1C5C1 /* Pods_cryptotrackerUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2B67DD15C5CBAFD450CF1EA /* Pods_cryptotrackerUITests.framework */; };
 /* End PBXBuildFile section */
@@ -59,6 +60,7 @@
 		B0228B6E1FC8A614003D5B57 /* MarketViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketViewController.swift; sourceTree = "<group>"; };
 		B0228B701FC8A67D003D5B57 /* MyHoldingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyHoldingsViewController.swift; sourceTree = "<group>"; };
 		B0228B731FC8AC01003D5B57 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
+		B0228B771FC8DEC7003D5B57 /* CryptoCurrency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoCurrency.swift; sourceTree = "<group>"; };
 		B0959D1A1FC8A3A10028F404 /* FontAwesomeHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontAwesomeHelper.swift; sourceTree = "<group>"; };
 		CE155306C2CCE8D06D359624 /* Pods-cryptotrackerUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cryptotrackerUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-cryptotrackerUITests/Pods-cryptotrackerUITests.release.xcconfig"; sourceTree = "<group>"; };
 		D8BEB0F1EFDC20A100237532 /* Pods_cryptotracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_cryptotracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -143,6 +145,8 @@
 		B01A35FC1FC8A129007A02F5 /* cryptotracker */ = {
 			isa = PBXGroup;
 			children = (
+				B0228B761FC8DEB6003D5B57 /* Models */,
+				B0228B751FC8DEA6003D5B57 /* Services */,
 				B0228B721FC8ABF7003D5B57 /* Extensions */,
 				B01A36091FC8A129007A02F5 /* Info.plist */,
 				B0959D191FC8A2970028F404 /* Application */,
@@ -177,6 +181,21 @@
 				B0228B731FC8AC01003D5B57 /* UIColor.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		B0228B751FC8DEA6003D5B57 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		B0228B761FC8DEB6003D5B57 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				B0228B771FC8DEC7003D5B57 /* CryptoCurrency.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		B0959D161FC8A2600028F404 /* Helpers */ = {
@@ -359,15 +378,19 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-cryptotracker/Pods-cryptotracker-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Anchorage/Anchorage.framework",
 				"${BUILT_PRODUCTS_DIR}/FontAwesome.swift/FontAwesome_swift.framework",
 				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
 				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Anchorage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FontAwesome_swift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -513,6 +536,7 @@
 				B0228B6F1FC8A614003D5B57 /* MarketViewController.swift in Sources */,
 				B0228B741FC8AC01003D5B57 /* UIColor.swift in Sources */,
 				B01A36001FC8A129007A02F5 /* RootTabViewController.swift in Sources */,
+				B0228B781FC8DEC7003D5B57 /* CryptoCurrency.swift in Sources */,
 				B0228B711FC8A67D003D5B57 /* MyHoldingsViewController.swift in Sources */,
 				B01A35FE1FC8A129007A02F5 /* AppDelegate.swift in Sources */,
 				B0959D1B1FC8A3A10028F404 /* FontAwesomeHelper.swift in Sources */,

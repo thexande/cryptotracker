@@ -8,7 +8,8 @@ target 'cryptotracker' do
   pod 'FontAwesome.swift'
   pod 'Realm'
   pod 'RealmSwift'
-  
+  pod 'Anchorage'
+  pod 'SDWebImage'
   target 'cryptotrackerTests' do
     inherit! :search_paths
     # Pods for testing
