@@ -45,6 +45,12 @@ class MarketCell: UITableViewCell {
     lazy var logoContainer = UIStackView(arrangedSubviews: [self.titleLabel, self.subTitleLabel])
     let rankView = PillView()
     
+    lazy var rankContainer: UIView = {
+        let view = UIView()
+        view.addSubview(rankView)
+        return view
+    }()
+    
     func setCrypto(_ crypto: RealmCryptoCurrency) {
         guard let url = URL(string: crypto.iconUrl) else { return }
         logoImageView.sd_setImage(with: url, completed: nil)
@@ -57,19 +63,25 @@ class MarketCell: UITableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        let views: [UIView] = [logoImageView, logoContainer, percentageChangeLabel, rankView]
+        let views: [UIView] = [logoImageView, logoContainer, percentageChangeLabel, rankContainer]
         views.forEach { view in
             addSubview(view)
         }
         
         rankView.centerYAnchor == centerYAnchor
-        rankView.leadingAnchor == leadingAnchor + 12
+        rankContainer.leadingAnchor == leadingAnchor + 12
+        rankContainer.widthAnchor == 36
+        rankContainer.verticalAnchors == verticalAnchors
+    
+        rankView.centerAnchors == rankContainer.centerAnchors
         
         percentageChangeLabel.trailingAnchor == trailingAnchor - 12
         percentageChangeLabel.centerYAnchor == centerYAnchor
         
         titleLabel.font = UIFont.systemFont(ofSize: 28, weight: .ultraLight)
         subTitleLabel.font = UIFont.systemFont(ofSize: 10, weight: .light)
+        percentageChangeLabel.font = UIFont.systemFont(ofSize: 16, weight: .ultraLight)
+        
         logoContainer.axis = .vertical
         logoContainer.leadingAnchor == logoImageView.trailingAnchor + 12
         logoContainer.centerYAnchor == centerYAnchor
@@ -78,7 +90,7 @@ class MarketCell: UITableViewCell {
         logoImageView.heightAnchor == 40
         logoImageView.widthAnchor == logoImageView.heightAnchor
         logoImageView.centerYAnchor == centerYAnchor
-        logoImageView.leadingAnchor == contentView.leadingAnchor + 36
+        logoImageView.leadingAnchor == rankContainer.trailingAnchor + 12
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -104,7 +116,7 @@ class MarketViewController: UIViewController {
     }()
     
     lazy var segment: UISegmentedControl = {
-        let segment: UISegmentedControl = UISegmentedControl(items: ["1 hr %", "24 hr %", "7 day %", "Cap", "Volume"])
+        let segment: UISegmentedControl = UISegmentedControl(items: [ "Cap", "1 hr %", "24 hr %", "7 day %", "Volume"])
         segment.sizeToFit()
         segment.addTarget(self, action: #selector(didChangeSegmentedControl(_:)), for: .valueChanged)
         segment.tintColor = UIColor.white
@@ -128,7 +140,34 @@ class MarketViewController: UIViewController {
     }
     
     @objc func didChangeSegmentedControl(_ segmented: UISegmentedControl) {
-
+        switch segmented.selectedSegmentIndex {
+        case 0:
+            cryptos = cryptos?.sorted(by: { (crypto1, crypto2) -> Bool in
+                return crypto1.rank < crypto2.rank
+            })
+            tableView.reloadData()
+        case 1:
+            cryptos = cryptos?.sorted(by: { (crypto1, crypto2) -> Bool in
+                return crypto1.percentChangeOneHour < crypto2.percentChangeOneHour
+            })
+            tableView.reloadData()
+        case 2:
+            cryptos = cryptos?.sorted(by: { (crypto1, crypto2) -> Bool in
+                return crypto1.percentChangeTwentyFourHour < crypto2.percentChangeTwentyFourHour
+            })
+            tableView.reloadData()
+        case 3:
+            cryptos = cryptos?.sorted(by: { (crypto1, crypto2) -> Bool in
+                return crypto1.percentChangeSevenDays < crypto2.percentChangeSevenDays
+            })
+            tableView.reloadData()
+        case 3:
+            cryptos = cryptos?.sorted(by: { (crypto1, crypto2) -> Bool in
+                return crypto1.twentyFourHourVolumeUsd < crypto2.twentyFourHourVolumeUsd
+            })
+            tableView.reloadData()
+        default: return
+        }
     }
 }
 
