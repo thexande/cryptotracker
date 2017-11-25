@@ -11,6 +11,10 @@ import UIKit
 struct StyleConstants {
     struct color {
         static let primaryGreen: UIColor = UIColor(hex: "4A9D86")
+        static let emerald: UIColor = UIColor(hex: "65C87A")
+        static let primaryRed: UIColor = UIColor(hex: "D65745")
+        static let orange: UIColor = UIColor(hex: "E79F3C")
+        static let purple: UIColor = UIColor(hex: "925EB1")
     }
 }
 

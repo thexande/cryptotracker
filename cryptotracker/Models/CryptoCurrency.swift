@@ -62,6 +62,7 @@ class RealmCrudHelper {
             realmCrypto.maxSupply = Double(crypto.maxSupply ?? "") ?? 0
             realmCrypto.percentChangeOneHour = Double(crypto.percentChangeOneHour) ?? 0
             realmCrypto.percentChangeSevenDays = Double(crypto.percentChangeSevenDays ?? "") ?? 0
+            realmCrypto.percentChangeTwentyFourHour = Double(crypto.percentChangeTwentyFourHour) ?? 0
             realmCrypto.lastUpdated = crypto.lastUpdated
             realmCrypto.iconUrl = "https://files.coinmarketcap.com/static/img/coins/128x128/\(crypto.id).png"
             return realmCrypto
