@@ -50,6 +50,7 @@ class MarketViewController: UIViewController {
     }()
     
     let loadingViewController = BlurLoadingViewController()
+    let marketHeaderView =  MarketHeaderView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 107))
 
     
     @objc func didPressRefresh() {
@@ -60,7 +61,7 @@ class MarketViewController: UIViewController {
         super.viewDidLoad()
         title = "market".uppercased()
         
-//        tableView.tableHeaderView = MarketHeaderView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 125))
+        tableView.tableHeaderView = self.marketHeaderView
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: FontAwesomeHelper.iconToImage(icon: .refresh, color: .white, width: 35, height: 35), style: .plain, target: self, action: #selector(didPressRefresh))
         
@@ -72,6 +73,7 @@ class MarketViewController: UIViewController {
         tableView.topAnchor ==  view.topAnchor
         
         loadCryptos()
+        loadMarketInfo()
         
         // Setup the Search Controller
         searchController.searchResultsUpdater = self
@@ -83,6 +85,14 @@ class MarketViewController: UIViewController {
         // Setup the Scope Bar
         searchController.searchBar.scopeButtonTitles = ["All", "Chocolate", "Hard", "Other"]
         searchController.searchBar.delegate = self
+    }
+    
+    func loadMarketInfo() {
+        CryptoCurrencyHelper.fetchMarketInformation(url: UrlConstants.globalInfoUrl) { [weak self] (marketInformation) in
+            DispatchQueue.main.async {
+                self?.marketHeaderView.setMarketInfo(marketInformation)
+            }
+        }
     }
     
     func loadCryptos() {

@@ -13,6 +13,5 @@ class MyHoldingsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "my holdings".uppercased()
-        view.backgroundColor = .green
     }
 }

@@ -3,6 +3,7 @@ import PromiseKit
 
 struct UrlConstants {
     static let coinMarketCapTickerUrl: URL = URL(string: "https://api.coinmarketcap.com/v1/ticker/")!
+    static let globalInfoUrl: URL = URL(string: "https://api.coinmarketcap.com/v1/global/")!
 }
 
 struct CryptoDescription {
@@ -11,6 +12,21 @@ struct CryptoDescription {
 }
 
 class CryptoCurrencyHelper {
+    static func fetchMarketInformation(url: URL, _ completion: @escaping(CryptoWorldInformation) -> Void) {
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+            guard let data = data else { return }
+            let string1 = String(data: data, encoding: String.Encoding.utf8) ?? "Data could not be printed"
+            print(string1)
+
+            do {
+                let marketInfo = try JSONDecoder().decode(CryptoWorldInformation.self, from: data)
+                completion(marketInfo)
+            } catch let error {
+                print(error.localizedDescription)
+            }
+        }.resume()
+    }
+    
     static func fetchCryptos(url: URL, _ completion: @escaping([CryptoCurrency]) -> Void) {
         URLSession.shared.dataTask(with: url) { (data, response, error) in
             guard let data = data else { return }
@@ -20,7 +36,7 @@ class CryptoCurrencyHelper {
             } catch let error {
                 print(error.localizedDescription)
             }
-            }.resume()
+        }.resume()
     }
 //    static func fetchCryptos(url: URL, _ completion: @escaping([CryptoCurrencyDescription]) -> Void) {
 //        URLSession.shared.dataTask(with: url) { (data, response, error) in

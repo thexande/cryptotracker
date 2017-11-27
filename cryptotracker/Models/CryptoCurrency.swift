@@ -10,8 +10,6 @@ import Foundation
 import RealmSwift
 import Realm
 
-
-
 class RealmCryptoCurrency: Object {
     @objc dynamic var id = ""
     @objc dynamic var name = ""
@@ -38,6 +36,18 @@ class RealmCryptoCurrency: Object {
 struct CryptoCurrencyDescription {
     let crypto: CryptoCurrency
     let description: String
+}
+
+struct CryptoWorldInformation: Codable {
+    let totalMarketCapUsd: Float
+    let totalTwentyFourHourVolumeUsd: Float
+    let bitcoinPercentageOfMarketCap: Float
+    
+    enum CodingKeys: String, CodingKey {
+        case totalMarketCapUsd = "total_market_cap_usd"
+        case bitcoinPercentageOfMarketCap = "bitcoin_percentage_of_market_cap"
+        case totalTwentyFourHourVolumeUsd = "total_24h_volume_usd"
+    }
 }
 
 struct CryptoCurrency: Codable {
