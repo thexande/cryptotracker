@@ -9,9 +9,14 @@
 import Foundation
 import UIKit
 
-class MyHoldingsViewController: UIViewController {
+class MyHoldingsViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "my holdings".uppercased()
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(didPressAdd))
+    }
+    
+    @objc func didPressAdd() {
+        
     }
 }

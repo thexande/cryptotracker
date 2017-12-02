@@ -2,6 +2,29 @@ import UIKit
 import Anchorage
 import Realm
 
+class CryptoDescriptionCell: UITableViewCell {
+    let cryptoDescription: String
+    lazy var descriptionLabel: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 0
+        label.textColor = .black
+        label.font = UIFont.systemFont(ofSize: 12)
+        label.text = self.cryptoDescription
+        return label
+    }()
+    
+    init(cryptoDescription: String) {
+        self.cryptoDescription = cryptoDescription
+        super.init(style: .default, reuseIdentifier: nil)
+        contentView.addSubview(descriptionLabel)
+        descriptionLabel.edgeAnchors == contentView.edgeAnchors + 12
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
 class CryptoDetailViewController: UITableViewController {
     let crypto: RealmCryptoCurrency
     lazy var sections = self.createDetailCells(for: self.crypto)
@@ -12,6 +35,7 @@ class CryptoDetailViewController: UITableViewController {
     }
     
     func createDetailCells(for crypto: RealmCryptoCurrency) ->  [DetailSection] {
+        let cryptoDescription = CryptoDescriptionCell(cryptoDescription: crypto.currencyDescription)
         let name = CryptoDetailCell(title: "Name", detail: crypto.name)
         let symbol = CryptoDetailCell(title: "Symbol", detail: crypto.symbol)
         let rank = CryptoDetailCell(title: "Rank", detail: String(crypto.rank))
@@ -39,7 +63,15 @@ class CryptoDetailViewController: UITableViewController {
         let marketCapSection = DetailSection(title: "Supply", cells: [availableSupply, totalSupply, maxSupply])
         let percentageSection = DetailSection(title: "Percentage Movements", cells: [percentChangeOneHour, percentChangeTwentyFour, percentChangeSevenDay])
         
-        return [infoSection, priceSection, percentageSection, volumeSection, marketCapSection]
+        let sections: [DetailSection] = {
+            guard crypto.currencyDescription.count > 40 else {
+                return [infoSection, priceSection, percentageSection, volumeSection, marketCapSection]
+            }
+            let descriptionSection = DetailSection(title: "Description", cells: [cryptoDescription])
+            return[infoSection, priceSection, percentageSection, volumeSection, marketCapSection, descriptionSection]
+        }()
+        
+        return sections
     }
     
     init(_ crypto: RealmCryptoCurrency) {
@@ -53,6 +85,8 @@ class CryptoDetailViewController: UITableViewController {
         
         tableView.tableFooterView = UIView()
         tableView.allowsSelection = false
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 40
         
         titleImage.sd_setImage(with: URL(string: crypto.iconUrl), completed: nil)
         
@@ -91,9 +125,5 @@ class CryptoDetailViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         return self.sections[indexPath.section].cells[indexPath.row]
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 40
     }
 }

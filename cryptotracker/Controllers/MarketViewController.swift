@@ -12,6 +12,7 @@ import Anchorage
 import SDWebImage
 import Realm
 import RealmSwift
+import PromiseKit
 
 
 extension Double {
@@ -63,7 +64,7 @@ class MarketViewController: UIViewController {
         
         tableView.tableHeaderView = self.marketHeaderView
         
-        navigationItem.leftBarButtonItem = UIBarButtonItem(image: FontAwesomeHelper.iconToImage(icon: .refresh, color: .white, width: 35, height: 35), style: .plain, target: self, action: #selector(didPressRefresh))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(didPressRefresh))
         
         view.addSubview(tableView)
         self.navigationItem.titleView = segment
@@ -83,7 +84,7 @@ class MarketViewController: UIViewController {
         definesPresentationContext = true
         
         // Setup the Scope Bar
-        searchController.searchBar.scopeButtonTitles = ["All", "Chocolate", "Hard", "Other"]
+//        searchController.searchBar.scopeButtonTitles = ["All", "Chocolate", "Hard", "Other"]
         searchController.searchBar.delegate = self
     }
     
@@ -99,10 +100,15 @@ class MarketViewController: UIViewController {
         loadingViewController.modalPresentationStyle = .overFullScreen
         self.present(loadingViewController, animated: false, completion: nil)
         CryptoCurrencyHelper.fetchCryptos(url: UrlConstants.coinMarketCapTickerUrl) { [weak self] (cryptos) in
-            RealmCrudHelper.writeCryptos(cryptos)
-            DispatchQueue.main.async {
-                self?.loadingViewController.unblur()
-                self?.loadingViewController.dismiss(animated: true, completion: nil)
+            
+            _ = PromiseKit.when(fulfilled: cryptos.map { crypto in
+                return CryptoCurrencyHelper.fetchDescription(for: crypto)
+            }).then { cryptoDescriptions -> Void in
+                RealmCrudHelper.writeCryptos(cryptoDescriptions)
+                DispatchQueue.main.async {
+                    self?.loadingViewController.unblur()
+                    self?.loadingViewController.dismiss(animated: true, completion: nil)
+                }
             }
         }
     }

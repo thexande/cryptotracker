@@ -27,16 +27,13 @@ class RealmCryptoCurrency: Object {
     @objc dynamic var percentChangeSevenDays = 0.0
     @objc dynamic var lastUpdated = ""
     @objc dynamic var iconUrl = ""
+    @objc dynamic var currencyDescription = ""
     
     override static func primaryKey() -> String? {
         return "id"
     }
 }
 
-struct CryptoCurrencyDescription {
-    let crypto: CryptoCurrency
-    let description: String
-}
 
 struct CryptoWorldInformation: Codable {
     let totalMarketCapUsd: Float
