@@ -11,6 +11,7 @@ target 'cryptotracker' do
   pod 'Anchorage'
   pod 'SDWebImage'
   pod 'PromiseKit'
+  pod 'RxRealm'
   target 'cryptotrackerTests' do
     inherit! :search_paths
     # Pods for testing
