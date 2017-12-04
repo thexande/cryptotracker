@@ -29,8 +29,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        let vc = UINavigationController(rootViewController: MarketViewController())
+        vc.navigationBar.prefersLargeTitles = true
+        vc.navigationItem.largeTitleDisplayMode = .always
+        
         window = UIWindow(frame: UIScreen.main.bounds)
-        window?.rootViewController = RootTabViewController()
+        window?.rootViewController = vc
         window?.makeKeyAndVisible()
         
 //        UIApplication.shared.statusBarStyle = .lightContent

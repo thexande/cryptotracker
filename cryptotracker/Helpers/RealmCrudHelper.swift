@@ -22,8 +22,12 @@ class RealmCrudHelper {
     static func writeCryptos(_ cryptos: [CryptoCurrencyDesctiption]) {
         let realmCryptos: [RealmCryptoCurrency] = cryptos.map { cryptoDescription in
             let realmCrypto = RealmCryptoCurrency()
-            realmCrypto.currencyDescription = cryptoDescription.description ?? ""
-            realmCrypto.id = cryptoDescription.crypto.id
+            realmCrypto.currencyDescription = {
+                guard let description = cryptoDescription.description, !description.contains("<") else { return "" }
+                return description
+            }()
+            realmCrypto
+                .id = cryptoDescription.crypto.id
             realmCrypto.name = cryptoDescription.crypto.name
             realmCrypto.symbol = cryptoDescription.crypto.symbol
             realmCrypto.rank = Int(cryptoDescription.crypto.rank) ?? 0

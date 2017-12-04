@@ -13,6 +13,7 @@ import SDWebImage
 import Realm
 import RealmSwift
 import PromiseKit
+import Lottie
 
 
 extension Double {

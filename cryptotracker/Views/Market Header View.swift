@@ -51,7 +51,7 @@ class MarketHeaderView: UIView {
         
         dividerView.horizontalAnchors == horizontalAnchors
         dividerView.bottomAnchor == bottomAnchor
-        dividerView.heightAnchor == 1
+        dividerView.heightAnchor == 0.5
         
         stackView.horizontalAnchors == horizontalAnchors
         stackView.topAnchor == topAnchor + 12

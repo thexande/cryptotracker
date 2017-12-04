@@ -12,6 +12,7 @@ target 'cryptotracker' do
   pod 'SDWebImage'
   pod 'PromiseKit'
   pod 'RxRealm'
+  pod 'lottie-ios'
   target 'cryptotrackerTests' do
     inherit! :search_paths
     # Pods for testing
